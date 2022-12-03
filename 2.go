@@ -4,7 +4,6 @@ import (
 	// "strconv"
 	// "sort"
 	// "fmt"
-	"strings"
 )
 
 type Move uint8
@@ -52,6 +51,7 @@ func calc_winner(left Move, right Move) int {
 	return 6
 }
 
+
 func calc_move(opponent Move, outcome Outcome) Move {
 	if outcome == Win {
 		if opponent == Rock {
@@ -85,9 +85,8 @@ func day2a(lines []string) int {
 	var solution int	
 
 	for _, line := range lines {
-		words := strings.Split(line, " ")
-		left := move_map[words[0][0]]
-		right := move_map[words[1][0]]
+		left := move_map[line[0]]
+		right := move_map[line[2]]
 		result := calc_winner(left, right)
 		solution += result + int(right)	
 		// fmt.Printf("%s %d\n", line, result + int(left))	
@@ -100,9 +99,8 @@ func day2b(lines []string) int {
 	var solution int	
 
 	for _, line := range lines {
-		words := strings.Split(line, " ")
-		opponent := move_map[words[0][0]]
-		outcome := outcome_map[words[1][0]]
+		opponent := move_map[line[0]]
+		outcome := outcome_map[line[2]]
 		result := calc_move(opponent, outcome)
 		solution += int(outcome) + int(result)	
 		// fmt.Printf("%s %d %d\n", line, int(outcome), int(result))	

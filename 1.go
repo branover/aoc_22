@@ -11,13 +11,14 @@ func day1a(lines []string) int {
 	for _, line := range lines {
 		cals, err := strconv.Atoi(line)
 		if err != nil {
+			if elf > solution {
+				solution = elf
+			}			
 			elf = 0
 			continue
 		}
 		elf += cals
-		if elf > solution {
-			solution = elf
-		}
+
 	}
 
 	return solution
@@ -30,17 +31,18 @@ func day1b(lines []string) int {
 	for _, line := range lines {
 		cals, err := strconv.Atoi(line)
 		if err != nil {
+			for i, top := range top3 {
+				if elf > top {
+					top3[i] = elf
+					break
+				}
+			}			
 			elf = 0
 			continue
 		}
 		elf += cals
 
-		for i, top := range top3 {
-			if elf > top {
-				top3[i] = elf
-				break
-			}
-		}
+
 	}
 
 	for _, elf := range top3 {
