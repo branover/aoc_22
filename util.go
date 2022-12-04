@@ -32,12 +32,19 @@ func main() {
 	args := os.Args[1:]
 	day := args[0]
 	part := args[1]
+	sample := false
+	if len(args) >= 3 {
+		sample = true
+	}
 
-	lines := readlines("data/" + day)
-	// lines := readlines("sample/" + day)
+	var lines []string
+	if sample {
+		lines = readlines("sample/" + day)
+	} else {
+		lines = readlines("data/" + day)
+	}	
 
 	var func_call func([]string) int
-
 	switch day + part {
 	case "1a":
 		func_call = day1a
@@ -141,19 +148,17 @@ func main() {
 		func_call = day25b
 	}
 
-	max_repetitions := 1000
+	// max_repetitions := 1000
+	max_repetitions := 1
+	var solution int
 	var total_elapsed time.Duration
 	for i := 0; i < max_repetitions; i++ {
 		start := time.Now()
-		func_call(lines)
+		solution = func_call(lines)
 		total_elapsed += time.Since(start)
 	}
-	start := time.Now()
-	solution := func_call(lines)
-	elapsed := time.Since(start)
 
 	fmt.Println("Solution: ", solution)
-	fmt.Println("Time elapsed: ", elapsed.Microseconds(), "µs")
 	fmt.Println("Average time elapsed: ", total_elapsed.Microseconds()/int64(max_repetitions), "µs")
 
 }
