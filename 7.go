@@ -44,10 +44,10 @@ type command_parser struct {
 func (cp *command_parser) parse(line string) {
 	if line[0] == '$' {
 		// Shell command
-		cp.handle_shell_command(line)
+		cp.handle_shell_command(line[2:])
 	} else if line[0] == 'd' {
 		// Directory
-		cp.handle_dir(line)
+		cp.handle_dir(line[4:])
 	} else {
 		// File
 		cp.handle_file(line)
@@ -67,12 +67,10 @@ func (cp *command_parser) get_sizes_less_than(size int) int {
 }
 
 func (cp *command_parser) handle_shell_command(line string) {
-	// fmt.Println(line)
-	tokens := strings.Split(line, " ")
-	switch tokens[1] {
+	cmd := line[:2]
+	switch cmd {
 	case "cd": 
-		
-		dir_name := tokens[2]
+		dir_name := line[3:]
 		if dir_name == ".." {
 			cp.curr_dir = cp.curr_dir.parent
 		} else {
@@ -92,8 +90,7 @@ func (cp *command_parser) handle_shell_command(line string) {
 }
 
 func (cp *command_parser) handle_dir(line string) {
-	tokens := strings.Split(line, " ")
-	dir_name := tokens[1]
+	dir_name := line
 	if _, ok := cp.curr_dir.dirs[dir_name]; ok {
 		return
 	}
@@ -112,7 +109,7 @@ func (cp *command_parser) handle_dir(line string) {
 }
 
 func (cp *command_parser) handle_file(line string) {
-	tokens := strings.Split(line, " ")
+	tokens := strings.SplitN(line, " ", 2)
 	file_name := tokens[1]
 	file_size, _ := strconv.Atoi(tokens[0])
 	cp.curr_dir.files = append(cp.curr_dir.files, file {
